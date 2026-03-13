@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotic Arm Vision Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="top-bar glass-panel">
+            <div class="logo">
+                <i class="fa-solid fa-robot pulse-icon"></i>
+                <h1>Arm<span class="highlight">Vision</span> OS</h1>
+            </div>
+            <div class="status-indicator warning" id="connection-status">
+                <div class="dot"></div>
+                <span id="status-text">Models Loading...</span>
+            </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="dashboard-grid">
+            
+            <!-- Camera Feed Section -->
+            <section class="feed-section glass-panel">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-camera"></i> Live Telemetry Feed</h2>
+                    <div class="feed-controls">
+                        <button id="webcamButton" class="btn primary-btn disabled" disabled>
+                            <i class="fa-solid fa-video"></i> Start Camera
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="video-container" id="videoContainer">
+                    <div class="feed-overlay" id="feedOverlay">
+                        <i class="fa-solid fa-eye-slash fa-3x"></i>
+                        <p>Feed Offline</p>
+                    </div>
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas class="output_canvas" id="output_canvas" width="640" height="480"></canvas>
+                </div>
+            </section>
+
+            <!-- Control Panel Section -->
+            <aside class="control-panel">
+                <!-- Recognized Gesture Card -->
+                <div class="info-card glass-panel highlight-border">
+                    <div class="card-icon"><i class="fa-solid fa-hand-sparkles"></i></div>
+                    <div class="card-content">
+                        <h3>Current Gesture</h3>
+                        <div class="value-display" id="gesture-output">None</div>
+                        <p class="subtitle" id="gesture-confidence">Confidence: 0%</p>
+                    </div>
+                </div>
+
+                <!-- Face Tracking Card -->
+                <div class="info-card glass-panel">
+                    <div class="card-icon"><i class="fa-solid fa-face-smile"></i></div>
+                    <div class="card-content">
+                        <h3>Face Detected</h3>
+                        <div class="value-display" id="face-output">No Face</div>
+                        <p class="subtitle">Looking for landmarks</p>
+                    </div>
+                </div>
+
+                <!-- Manual Override Controls -->
+                <div class="manual-controls glass-panel" style="padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                    <h3 style="font-size: 1.1rem; display: flex; align-items: center; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--panel-border); margin: 0;"><i class="fa-solid fa-gamepad"></i> Manual Override</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Use if camera is unavailable</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <button class="btn" style="background: rgba(255,255,255,0.1); color: var(--text-main);" onclick="window.manualCommand('GRAB')"><i class="fa-solid fa-hand-fist"></i> Grab</button>
+                        <button class="btn" style="background: rgba(255,255,255,0.1); color: var(--text-main);" onclick="window.manualCommand('RELEASE')"><i class="fa-solid fa-hand-paper"></i> Release</button>
+                        <button class="btn" style="background: rgba(255,255,255,0.1); color: var(--text-main);" onclick="window.manualCommand('UP')"><i class="fa-solid fa-arrow-up"></i> Up</button>
+                        <button class="btn" style="background: rgba(255,255,255,0.1); color: var(--text-main);" onclick="window.manualCommand('DOWN')"><i class="fa-solid fa-arrow-down"></i> Down</button>
+                    </div>
+                </div>
+
+                <!-- Robotic Arm Diagnostics -->
+                <div class="diagnostics-panel glass-panel">
+                    <h3><i class="fa-solid fa-microchip"></i> System Diagnostics</h3>
+                    
+                    <div class="diagnostic-row">
+                        <span>Arm Target Action</span>
+                        <span class="badge" id="arm-action">IDLE</span>
+                    </div>
+                    
+                    <div class="command-log" id="command-log">
+                        <div class="log-entry system">[SYSTEM] Awaiting models...</div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Main Logic -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
